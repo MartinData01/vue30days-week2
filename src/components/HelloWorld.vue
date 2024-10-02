@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import axios from 'axios'
 
 const api = 'https://todolist-api.hexschool.io'
@@ -29,9 +29,27 @@ const singin = async () => {
   const res = await axios.post(`${api}/users/sign_in`, signinField.value)
   console.log(res)
   resToken.value = res.data.token
+  document.cookie = `customTodoToken=${res.data.token}`
 }
 
 // 驗證
+
+// 自動驗證
+const user = ref({})
+onMounted(async () => {
+  const token = document.cookie.replace(
+    /(?:(?:^|.*;\s*)customTodoToken\s*=\s*([^;]*).*$)|^.*$/,
+    '$1'
+  )
+  const res = await axios.get(`${api}/users/checkout`, {
+    headers: {
+      authorization: token
+    }
+  })
+  user.value = res.data
+})
+
+// 手動驗證
 const verifyField = ref('')
 const verifyResult = ref('')
 const verify = async () => {
@@ -55,7 +73,7 @@ const verify = async () => {
     <input type="text" placeholder="Nickname" v-model="signupField.nickname" />
     <button type="button" @click="singup">註冊</button>
   </div>
-  {{ signupField }}
+  輸入值：{{ signupField }}
 
   <hr />
   <div>
@@ -64,14 +82,21 @@ const verify = async () => {
     <input type="text" placeholder="Password" v-model="signinField.password" />
     <button type="button" @click="singin">登入</button>
   </div>
-  {{ signinField }}
-  {{ resToken }}
+  <p>輸入值：{{ signinField }}</p>
+  <p>回傳值：{{ resToken }}</p>
 
   <hr />
   <h2>驗證</h2>
+  <div>
+    <h3>進入畫面自動驗證</h3>
+    <p>uid: {{ user.uid }}</p>
+    <p>NickName: {{ user.nickname }}</p>
+  </div>
+  <hr />
+  <h3>手動驗證</h3>
   <input type="text" placeholder="Token" v-model="verifyField" />
   <button type="button" @click="verify">驗證</button>
-  {{ verifyResult }}
+  回傳值：{{ verifyResult }}
 
   <hr />
   <h2>登出</h2>

@@ -1,35 +1,23 @@
 # vue30days-week2
 
-This template should help get you started developing with Vue 3 in Vite.
+## Vue 30天體驗營，第二週作業
 
-## Recommended IDE Setup
+## Vite + Vue
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Vue Composition API
 
-## Customize configuration
+串接 API 登入、註冊及驗證相關狀態
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## 註冊
 
-## Project Setup
+使用者輸入資料，透過 axios post 回傳資料完成註冊，並接收回傳值(Token)
 
-```sh
-npm install
-```
+## 登入
 
-### Compile and Hot-Reload for Development
+使用者輸入資料，透過 axios post 傳送資料並回傳狀態，將回傳值(Token)存在 cookie 中，下次進到頁面自動驗證登入狀態
 
-```sh
-npm run dev
-```
+## 驗證
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+分為自動及手動
+自動：之前有登入過，就會讀取 cookie 自動登入，使用者不需要操作
+手動：貼上帳戶的 token 驗證後回傳結果(uid, NickName)
